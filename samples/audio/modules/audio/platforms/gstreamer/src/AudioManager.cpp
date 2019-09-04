@@ -19,7 +19,7 @@
 #include "GstAudioCapture.h"
 #include "common/GstUtils.h"
 
-#ifdef USE_AGL_FRAMEWORK
+#ifdef USE_4A_FRAMEWORK
 #include "agl/AGLAudioManager.h"
 #endif
 
@@ -27,7 +27,7 @@ namespace aace {
 namespace audio {
 
 struct AudioManager::Impl {
-#ifdef USE_AGL_FRAMEWORK
+#ifdef USE_4A_FRAMEWORK
 	std::unique_ptr<AGLAudioManager> mgr;
 #endif
 };
@@ -50,7 +50,7 @@ AudioManager::~AudioManager() = default;
 
 bool AudioManager::init(void *platformData)
 {
-#ifdef USE_AGL_FRAMEWORK
+#ifdef USE_4A_FRAMEWORK
 	m_impl->mgr = std::unique_ptr<AGLAudioManager>(new AGLAudioManager((afb_api_t) platformData));
 #endif
 	return true;
@@ -58,7 +58,7 @@ bool AudioManager::init(void *platformData)
 
 AudioOutputChannel AudioManager::openOutputChannel(const std::string &name, const std::string &device, const std::string &streamFormat)
 {
-#ifdef USE_AGL_FRAMEWORK
+#ifdef USE_4A_FRAMEWORK
 	// Request ALSA device
 	auto alsaDevice = m_impl->mgr->openAHLChannel(device);
 

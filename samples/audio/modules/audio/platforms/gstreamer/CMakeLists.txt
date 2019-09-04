@@ -10,7 +10,7 @@ set(PLATFORM_EXTRA_SOURCES)
 set(PLATFORM_EXTRA_INCLUDE_DIRS)
 set(PLATFORM_EXTRA_LDFLAGS)
 
-if(AGL_FRAMEWORK)
+if(4A_FRAMEWORK)
 	# AGL Application Framework
 	pkg_check_modules(AFB REQUIRED afb-daemon)
 	list(APPEND PLATFORM_EXTRA_SOURCES
@@ -22,7 +22,7 @@ if(AGL_FRAMEWORK)
 	list(APPEND PLATFORM_EXTRA_LDFLAGS
 		${AFB_LDFLAGS}
 	)
-	add_definitions(-DUSE_AGL_FRAMEWORK)
+	add_definitions(-DUSE_4A_FRAMEWORK)
 endif()
 
 add_library(AACEGStreamerAudio SHARED
