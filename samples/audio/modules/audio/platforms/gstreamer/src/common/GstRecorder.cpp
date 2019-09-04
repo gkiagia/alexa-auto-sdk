@@ -76,6 +76,17 @@ bool GstRecorder::init()
 	if (!createPipeline(pipelineName))
 		return false;
 
+#ifdef USE_PIPEWIRE
+	m_source = GstUtils::createElement(m_bin, "pwaudiosrc", "sink");
+	if (m_source && !m_device.empty()) {
+		g_info("Using role: %s\n", m_device.c_str());
+		auto s = gst_structure_new("properties",
+			"media.role", G_TYPE_STRING, m_device.c_str(),
+			NULL);
+		g_object_set(G_OBJECT(m_source), "stream-properties", s, NULL);
+		gst_structure_free(s);
+	}
+#else
 	if (m_device.empty()) {
 		m_source = GstUtils::createElement(m_pipeline, "autoaudiosrc", "source");
 	} else {
@@ -84,6 +95,7 @@ bool GstRecorder::init()
 		if (m_source)
 			g_object_set(G_OBJECT(m_source), "device", m_device.c_str(), NULL);
 	}
+#endif
 	if (!m_source)
 		return false;
 

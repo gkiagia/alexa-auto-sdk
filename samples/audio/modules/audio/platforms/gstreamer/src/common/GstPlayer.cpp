@@ -98,6 +98,17 @@ bool GstPlayer::init()
 	if (!m_volume)
 		return false;
 
+#ifdef USE_PIPEWIRE
+	m_sink = GstUtils::createElement(m_bin, "pwaudiosink", "sink");
+	if (m_sink && !m_device.empty()) {
+		g_info("Using role: %s\n", m_device.c_str());
+		auto s = gst_structure_new("properties",
+			"media.role", G_TYPE_STRING, m_device.c_str(),
+			NULL);
+		g_object_set(G_OBJECT(m_sink), "stream-properties", s, NULL);
+		gst_structure_free(s);
+	}
+#else
 	if (m_device.empty()) {
 		m_sink = GstUtils::createElement(m_bin, "autoaudiosink", "sink");
 	} else {
@@ -106,6 +117,7 @@ bool GstPlayer::init()
 		if (m_sink)
 			g_object_set(G_OBJECT(m_sink), "device", m_device.c_str(), NULL);
 	}
+#endif
 	if (!m_sink)
 		return false;
 

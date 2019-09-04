@@ -1,5 +1,6 @@
 add_definitions(-DUSE_GLOOP)
 #add_definitions(-DUSE_DUCKING)
+add_definitions(-DUSE_PIPEWIRE)
 
 # GStreamer
 find_package(PkgConfig)
